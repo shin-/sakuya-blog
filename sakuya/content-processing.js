@@ -3,24 +3,9 @@ var fs = require('fs'),
 var md = require('markdown');
 var cache = require('./cache'),
     structures = require('./structures'),
-    utils = require('./utils');
+    utils = require('./utils'),
+    tagsUtils = require('./tags');
 
-// @sync
-// Retrieve tag instructions in `contents` string and return
-// a list of tags (duplicates are eliminated)
-function parseTags(contents) {
-    var re = /<!-- tags: ([^>]+)-->/g,
-        tags = structures.SSet(),
-        matchArray;
-
-    while (matchArray = re.exec(contents)) {
-        var t = matchArray[1].split(',').map(
-            function(item) { return item.trim(); }
-        );
-        tags.addAll(t);
-    }
-    return tags.toList();
-}
 
 // @internal
 // Retrieve mtime and contents of file at `path`
@@ -66,19 +51,20 @@ function filesToIndex(callback) {
         var count = files.length;
         for (i = count - 1; i >= 0; i--) {
             var file = files[i],
-                article_tags = parseTags(cache.getRaw(file.filename)),
-                article_name = stripMd(file.filename);
-            index.articles[article_name] = {
+                articleTags = tagsUtils.parseTags(cache.getRaw(file.filename)),
+                articleName = stripMd(file.filename);
+            index.articles[articleName] = {
                 file: file,
                 next: (i != count - 1 ? stripMd(files[i + 1].filename) : null),
                 prev: (i != 0 ? stripMd(files[i - 1].filename) : null),
-                tags: article_tags
+                tags: articleTags
             };
-            tags.addAll(article_tags);
+            tags.addAll(articleTags);
             if (i == 0) {
-                index.first = article_name;
+                index.first = articleName;
             }
         }
+        index.tags = tags.toList();
         callback(null, index);
     }
     return wrapped;
@@ -118,5 +104,4 @@ function generateIndex(contentsPath, callback) {
 
 }
 
-module.exports.parseTags = parseTags;
 module.exports.generateIndex = generateIndex;

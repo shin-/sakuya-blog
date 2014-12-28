@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% if tag %}
+<h2>Articles for tag "{{tag}}"</h2>
+{% else %}
+<h2>Available tags</h2>
+{% endif %}
+<ul>
+{% for article in articles %}
+<li><a href="{% if not tag %}/tags{% endif %}/{{article}}">{{article}}</a></li>
+{% endfor %}
+</ul>
+{% endblock content %}
+
+{% block nav %}{% endblock nav %}

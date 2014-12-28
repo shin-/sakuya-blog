@@ -20,3 +20,13 @@ body {
 	color: #0045a8;
 	font-size: 30%;
 }
+
+.label a {
+	color: white;
+	text-decoration: none;
+}
+
+.label a:hover {
+	color: white;
+	text-decoration: none;
+}

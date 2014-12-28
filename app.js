@@ -2,7 +2,8 @@ var express = require('express'),
     swig = require('swig');
 
 var middlewares = require('./sakuya/middlewares'),
-    content = require('./sakuya/content-processing');
+    content = require('./sakuya/content-processing'),
+    tags = require('./sakuya/tags');
 
 var app = express();
 
@@ -40,6 +41,22 @@ content.generateIndex(function(err, index) {
     app.get('/', function(req, res) {
         res.redirect('/' + index.first);
     });
+
+    app.get('/tags/:tag', function(req, res) {
+        var articles = tags.findArticlesForTag(index, req.params.tag)
+        res.render('tags.html', {
+            blogTitle: 'Sample blog',
+            articles: articles,
+            tag: req.params.tag
+        })
+    });
+
+    app.get('/tags/', function(req, res) {
+        res.render('tags.html', {
+            blogTitle: 'Sample blog',
+            articles: index.tags
+        })
+    })
 
     var server = app.listen(1990, function () {
         var host = server.address().address;

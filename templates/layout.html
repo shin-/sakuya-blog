@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <title>{{blogTitle}}</title>
-        <link rel="stylesheet" href="css/main.css"/>
+        <link rel="stylesheet" href="/css/main.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     </head>
     <body>
@@ -10,20 +10,26 @@
         <div id="header" class="row page-header">
             <a href="/"><h1>{{blogTitle}} <small>Sakuya blog engine</small></h1></a>
         </div>
+
         <div id="article" class="row panel">
+        {% block content %}
             <ul id="tags" class="col-md-4 list-inline">
             {% for tag in tags %}
-                <li class="label label-info">{{tag}}</li>
+                <li class="label label-info"><a href="/tags/{{tag}}">{{tag}}</a></li>
             {% endfor %}
             </ul>
             <p id="article-text" class="col-md-8">{{articleContents()}}</p>
+        {% endblock content %}
         </div>
+
         <nav id="nav" class="row">
+        {% block nav %}
         <ul class="pager">
             <li class="previous {% if not prev %}disabled{% endif %}"><a href="/{{prev}}">Previous article</a></li>
             <li class="next {% if not next %}disabled{% endif %}"><a href="/{{next}}">Next article</a></li>
         </ul>
-        </div>
+        {% endblock nav %}
+        </nav>
     </div>
     </body>
 </html>
