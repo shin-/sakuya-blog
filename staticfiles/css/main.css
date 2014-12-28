@@ -1,0 +1,22 @@
+body {
+	font-family: sans-serif;
+}
+
+#header {
+	background-color: #00455f;
+	padding: 20px 0 0 20px;
+}
+
+#header a {
+	text-decoration: none;
+	color: white;
+}
+
+#header h1 {
+	font-size: 40px;
+}
+
+#header h1 small {
+	color: #0045a8;
+	font-size: 30%;
+}

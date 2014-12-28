@@ -42,6 +42,10 @@ function processFile(name, path, callback) {
     });
 }
 
+function stripMd(filename) {
+    return filename.slice(0, -3);
+}
+
 // @internal
 // Creates an index object from a list of files returned by `processFile`
 function filesToIndex(callback) {
@@ -63,11 +67,11 @@ function filesToIndex(callback) {
         for (i = count - 1; i >= 0; i--) {
             var file = files[i],
                 article_tags = parseTags(cache.getRaw(file.filename)),
-                article_name = file.filename.slice(0, -3);
+                article_name = stripMd(file.filename);
             index.articles[article_name] = {
                 file: file,
-                next: (i != count ? file[i + 1] : null),
-                prev: (i != 0 ? file[i - 1] : null),
+                next: (i != count - 1 ? stripMd(files[i + 1].filename) : null),
+                prev: (i != 0 ? stripMd(files[i - 1].filename) : null),
                 tags: article_tags
             };
             tags.addAll(article_tags);

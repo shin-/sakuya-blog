@@ -5,3 +5,5 @@
 if code_block:
 	some_code()
 ```
+
+<!-- tags: test, dev, markdown, navigation, sakuya -->

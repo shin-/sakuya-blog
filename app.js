@@ -1,9 +1,16 @@
-var express = require('express');
+var express = require('express'),
+    swig = require('swig');
 
 var middlewares = require('./sakuya/middlewares'),
     content = require('./sakuya/content-processing');
 
 var app = express();
+
+app.use(express.static('staticfiles'));
+
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.set('views', './templates');
 
 console.log('Processing content files...')
 content.generateIndex(function(err, index) {
@@ -15,13 +22,18 @@ content.generateIndex(function(err, index) {
         ' articles found.'
     )
     for (articleName in index.articles) {
-        var article = index.articles[articleName];
-        app.get('/' + articleName, 
-            middlewares.render_markdown(index), 
+        app.get('/' + articleName,
+            middlewares.registerArticleName(articleName),
+            middlewares.renderMarkdown(index),
             function(req, res) {
-                res.setHeader('Content-Type', 'text/html');
-                // FIXME: Previous, next, header, footer, tags...
-                res.end(req.articleHTML);
+                var article = index.articles[req.articleName];
+                res.render('layout.html', {
+                    blogTitle: 'Sample blog',
+                    prev: article.prev,
+                    next: article.next,
+                    tags: article.tags,
+                    articleContents: function() { return req.articleHTML; }
+                });
             }
         );
     }
