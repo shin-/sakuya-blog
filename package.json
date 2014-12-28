@@ -19,6 +19,7 @@
   "homepage": "https://github.com/shin-/sakuya-blog",
   "dependencies": {
     "express": "^4.10.6",
-    "markdown": "^0.5.0"
+    "marked": "^0.3.2",
+    "underscore": "^1.7.0"
   }
 }
