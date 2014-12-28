@@ -1,5 +1,6 @@
 cache = {
-	articles: {}
+	articles: {},
+	raws: {}
 };
 
 function getArticle(name) {
@@ -11,7 +12,18 @@ function setArticle(name, content) {
 	return true;
 }
 
+function setRaw(name, content) {
+	cache.raws[name] = content;
+	return true;
+}
+
+function getRaw(name) {
+	return cache.raws[name];
+}
+
 module.exports = {
 	getArticle: getArticle,
-	setArticle: setArticle
+	setArticle: setArticle,
+	getRaw: getRaw,
+	setRaw: setRaw
 };

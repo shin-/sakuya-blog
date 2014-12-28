@@ -12,7 +12,7 @@ function render_markdown(index) {
             req.articleHTML = articleHTML;
             return next();
         }
-        articleHTML = md(index.articles[articleName].file.contents);
+        articleHTML = md(cache.getRaw(articleName + '.md'));
         cache.setArticle(articleName, articleHTML);
         req.articleHTML = articleHTML;
         return next();

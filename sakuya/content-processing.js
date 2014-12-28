@@ -1,7 +1,8 @@
 var fs = require('fs'),
     pathutils = require('path');
 var md = require('markdown');
-var structures = require('./structures'),
+var cache = require('./cache'),
+    structures = require('./structures'),
     utils = require('./utils');
 
 // @sync
@@ -35,8 +36,7 @@ function processFile(name, path, callback) {
             if (err) {
                 return callback(err);
             }
-            // FIXME: that could amount to a lot of memory usage in the long run.
-            fileobj.contents = buf.toString();
+            cache.setRaw(name, buf.toString());
             callback(null, fileobj);
         });
     });
@@ -62,7 +62,7 @@ function filesToIndex(callback) {
         var count = files.length;
         for (i = count - 1; i >= 0; i--) {
             var file = files[i],
-                article_tags = parseTags(file.contents),
+                article_tags = parseTags(cache.getRaw(file.filename)),
                 article_name = file.filename.slice(0, -3);
             index.articles[article_name] = {
                 file: file,
