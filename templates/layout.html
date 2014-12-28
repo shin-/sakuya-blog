@@ -11,14 +11,14 @@
             <a href="/"><h1>{{blogTitle}} <small>Sakuya blog engine</small></h1></a>
         </div>
 
-        <div id="article" class="row panel">
+        <div id="article" class="panel">
         {% block content %}
-            <ul id="tags" class="col-md-4 list-inline">
+            <ul id="tags" class="row list-inline">
             {% for tag in tags %}
                 <li class="label label-info"><a href="/tags/{{tag}}">{{tag}}</a></li>
             {% endfor %}
             </ul>
-            <p id="article-text" class="col-md-8">{{articleContents()}}</p>
+            <p id="article-text" class="row">{{articleContents()}}</p>
         {% endblock content %}
         </div>
 
