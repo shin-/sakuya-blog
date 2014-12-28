@@ -1,4 +1,4 @@
-# Why I write my own blog system
+# Why I wrote my own blog system
 
 There are several reasons I started this project.
 
