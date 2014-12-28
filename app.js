@@ -13,8 +13,11 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', './templates');
 
+console.log('Loading configuration file... ')
+var config = require('./sakuya/config').loadConfig(process.env['SAKUYA_CFG']);
+
 console.log('Processing content files...')
-content.generateIndex(function(err, index) {
+content.generateIndex(config.contents, function(err, index) {
     if (err) {
         return console.error(err);
     }
@@ -29,7 +32,7 @@ content.generateIndex(function(err, index) {
             function(req, res) {
                 var article = index.articles[req.articleName];
                 res.render('layout.html', {
-                    blogTitle: 'Sample blog',
+                    blogTitle: config.title,
                     prev: article.prev,
                     next: article.next,
                     tags: article.tags,
@@ -45,7 +48,7 @@ content.generateIndex(function(err, index) {
     app.get('/tags/:tag', function(req, res) {
         var articles = tags.findArticlesForTag(index, req.params.tag)
         res.render('tags.html', {
-            blogTitle: 'Sample blog',
+            blogTitle: config.title,
             articles: articles,
             tag: req.params.tag
         })
@@ -53,7 +56,7 @@ content.generateIndex(function(err, index) {
 
     app.get('/tags/', function(req, res) {
         res.render('tags.html', {
-            blogTitle: 'Sample blog',
+            blogTitle: config.title,
             articles: index.tags
         })
     })

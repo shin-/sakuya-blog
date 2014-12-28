@@ -1,6 +1,5 @@
 var fs = require('fs'),
     pathutils = require('path');
-var md = require('markdown');
 var cache = require('./cache'),
     structures = require('./structures'),
     utils = require('./utils'),
