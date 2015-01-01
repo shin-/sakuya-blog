@@ -3,7 +3,7 @@ var express = require('express'),
 
 var middlewares = require('./sakuya/middlewares'),
     content = require('./sakuya/content-processing'),
-    tags = require('./sakuya/tags');
+    meta = require('./sakuya/meta');
 
 var app = express();
 
@@ -29,15 +29,14 @@ content.generateIndex(config.contents, function(err, index) {
         app.get('/' + articleName,
             middlewares.registerArticleName(articleName),
             middlewares.renderMarkdown(index),
+            middlewares.viewCommons(config, index),
             function(req, res) {
                 var article = index.articles[req.articleName];
-                res.render('layout.html', {
-                    blogTitle: config.title,
+                res.render('layout.html', req.commons({
                     prev: article.prev,
                     next: article.next,
-                    tags: article.tags,
                     articleContents: function() { return req.articleHTML; }
-                });
+                }));
             }
         );
     }
@@ -45,21 +44,19 @@ content.generateIndex(config.contents, function(err, index) {
         res.redirect('/' + index.first);
     });
 
-    app.get('/tags/:tag', function(req, res) {
-        var articles = tags.findArticlesForTag(index, req.params.tag)
-        res.render('tags.html', {
-            blogTitle: config.title,
+    app.get('/tags/:tag', middlewares.viewCommons(config, index), function(req, res) {
+        var articles = meta.findArticlesForTag(index, req.params.tag)
+        res.render('tags.html', req.commons({
             articles: articles,
             tag: req.params.tag
-        })
+        }));
     });
 
-    app.get('/tags/', function(req, res) {
-        res.render('tags.html', {
-            blogTitle: config.title,
+    app.get('/tags/', middlewares.viewCommons(config, index), function(req, res) {
+        res.render('tags.html', req.commons({
             articles: index.tags
-        })
-    })
+        }));
+    });
 
     var server = app.listen(1990, function () {
         var host = server.address().address;

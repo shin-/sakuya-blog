@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 
+{% block pagetitle %}
+{% if tag %}Articles for tag "{{tag}}"{% else %}Tags{% endif %}
+{% endblock %}
+
 {% block content %}
 {% if tag %}
 <h2>Articles for tag "{{tag}}"</h2>

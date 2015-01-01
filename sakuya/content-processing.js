@@ -3,7 +3,7 @@ var fs = require('fs'),
 var cache = require('./cache'),
     structures = require('./structures'),
     utils = require('./utils'),
-    tagsUtils = require('./tags');
+    meta = require('./meta');
 
 
 // @internal
@@ -50,13 +50,15 @@ function filesToIndex(callback) {
         var count = files.length;
         for (i = count - 1; i >= 0; i--) {
             var file = files[i],
-                articleTags = tagsUtils.parseTags(cache.getRaw(file.filename)),
+                contents = cache.getRaw(file.filename),
+                articleTags = meta.parseTags(contents),
                 articleName = stripMd(file.filename);
             index.articles[articleName] = {
                 file: file,
                 next: (i != count - 1 ? stripMd(files[i + 1].filename) : null),
                 prev: (i != 0 ? stripMd(files[i - 1].filename) : null),
-                tags: articleTags
+                tags: articleTags,
+                title: meta.parseTitle(contents)
             };
             tags.addAll(articleTags);
             if (i == 0) {

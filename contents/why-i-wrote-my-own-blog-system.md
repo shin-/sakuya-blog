@@ -11,3 +11,4 @@ There are several reasons I started this project.
   [Docker Hub](http://registry.hub.docker.com) features, namely webhooks.
 
 <!-- tags: dev, sakuya, docker -->
+<!-- title: Why I wrote my own blog system -->

@@ -23,7 +23,19 @@ function parseTags(contents) {
     return tags.toList();
 }
 
+// @sync
+// Retrieve title instruction in `contents` string and return it
+function parseTitle(contents) {
+    var re = /<!-- title: ([^>]+)-->/g;
+    var match = re.exec(contents);
+    if (!match) {
+        return null;
+    }
+    return match[1].trim();
+}
+
 module.exports = {
 	findArticlesForTag: findArticlesForTag,
-	parseTags: parseTags
+	parseTags: parseTags,
+    parseTitle: parseTitle
 }

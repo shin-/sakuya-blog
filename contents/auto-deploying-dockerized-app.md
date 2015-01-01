@@ -1,4 +1,6 @@
 <!-- tags: docker, webhooks, deployment, python, docker-py, sakuya, dev, code -->
+<!-- title: Auto-deploying your dockerized app -->
+
 # Auto-deploying your dockerized app
 
 This article will explain how you can automate your app deployment using
