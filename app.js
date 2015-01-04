@@ -19,7 +19,7 @@ var config = require('./sakuya/config').loadConfig();
 console.log('Processing content files...')
 content.generateIndex(config.contents, function(err, index) {
     if (err) {
-        return console.error(err);
+        return console.error('Error generating index:', err);
     }
     console.log(
         'Index generated, ' + Object.keys(index.articles).length + 

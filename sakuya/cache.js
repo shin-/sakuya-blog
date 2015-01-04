@@ -8,7 +8,6 @@ function Module() {
             this.backend = MemoryBackend();
             break;
         case 'redis':
-            throw 'Redis cache not yet implemented. Please use mem instead.';
             this.backend = RedisBackend(cfg.cache);
             break;
         default:
@@ -56,6 +55,43 @@ MemoryBackend.prototype.set = function(cat, name, value, cb) {
     }
     this._cache[cat][name] = value;
     cb && cb(null, true);
+}
+
+function RedisBackend(cfg) {
+    if (!(this instanceof RedisBackend)) {
+        return new RedisBackend(cfg);
+    }
+    this._redis = require('redis').createClient(
+        cfg.port || 6379,
+        cfg.host || 'localhost',
+        { 'auth_pass': cfg.pass }
+    );
+
+    this._redis.on('error', function(err) {
+        console.warn(
+            'Redis has encountered a connection error "' + err + '"',
+            ', it should reconnect automatically.'
+        );
+    });
+
+    this._redis.select(cfg.db || 0, (function() {
+        if (cfg.flush) {
+            console.log('Flushing redis db #' + (cfg.db || 0));
+            this._redis.flushdb();
+        }
+    }).bind(this));
+}
+
+RedisBackend.prototype.key = function(cat, name) {
+    return 'sakuya:cache:' + cat + ':' + name;
+}
+
+RedisBackend.prototype.get = function(cat, name, cb) {
+    this._redis.get(this.key(cat, name), cb);
+};
+
+RedisBackend.prototype.set = function(cat, name, value, cb) {
+    this._redis.set(this.key(cat, name), value, cb);
 }
 
 module.exports = new Module();

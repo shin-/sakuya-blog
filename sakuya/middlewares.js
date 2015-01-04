@@ -20,10 +20,10 @@ function renderMarkdown(index) {
             }
             cache.getRaw(articleName + '.md', function(err, raw) {
                 articleHTML = md(raw);
+                req.articleHTML = articleHTML;
+                cache.setArticle(articleName, articleHTML);
+                return next();
             });
-            req.articleHTML = articleHTML;
-            cache.setArticle(articleName, articleHTML);
-            return next();
         });
 
 
