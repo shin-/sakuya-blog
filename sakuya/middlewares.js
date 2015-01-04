@@ -11,17 +11,22 @@ function registerArticleName(name) {
 
 function renderMarkdown(index) {
     function wrapped(req, res, next) {
-        var u = req.originalUrl;
-        var articleName = req.articleName,
-            articleHTML = cache.getArticle(articleName);
-        if (articleHTML) {
+        var u = req.originalUrl,
+            articleName = req.articleName;
+        cache.getArticle(articleName, function(err, articleHTML) {
+            if (articleHTML) {
+                req.articleHTML = articleHTML;
+                return next();
+            }
+            cache.getRaw(articleName + '.md', function(err, raw) {
+                articleHTML = md(raw);
+            });
             req.articleHTML = articleHTML;
+            cache.setArticle(articleName, articleHTML);
             return next();
-        }
-        articleHTML = md(cache.getRaw(articleName + '.md'));
-        cache.setArticle(articleName, articleHTML);
-        req.articleHTML = articleHTML;
-        return next();
+        });
+
+
     }
     return wrapped;
 }

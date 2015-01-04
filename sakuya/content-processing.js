@@ -20,8 +20,9 @@ function processFile(name, path, callback) {
             if (err) {
                 return callback(err);
             }
-            cache.setRaw(name, buf.toString());
-            callback(null, fileobj);
+            cache.setRaw(name, buf.toString(), function(err) {
+                callback(err, fileobj);
+            });
         });
     });
 }
@@ -47,26 +48,32 @@ function filesToIndex(callback) {
             // latest first
             return b.mtime.getTime() - a.mtime.getTime();
         });
-        var count = files.length;
-        for (i = count - 1; i >= 0; i--) {
-            var file = files[i],
-                contents = cache.getRaw(file.filename),
-                articleTags = meta.parseTags(contents),
-                articleName = stripMd(file.filename);
-            index.articles[articleName] = {
-                file: file,
-                next: (i != count - 1 ? stripMd(files[i + 1].filename) : null),
-                prev: (i != 0 ? stripMd(files[i - 1].filename) : null),
-                tags: articleTags,
-                title: meta.parseTitle(contents)
-            };
-            tags.addAll(articleTags);
-            if (i == 0) {
-                index.first = articleName;
-            }
-        }
-        index.tags = tags.toList();
-        callback(null, index);
+        var count = files.length,
+            cb = utils.forEachCallback(count, function(err) {
+                index.tags = tags.toList();
+                callback(err, index);
+            });
+        files.forEach(function(file, i, files) {
+            var articleName = stripMd(file.filename);
+            cache.getRaw(file.filename, function(err, contents) {
+                if (err) {
+                    return cb(err);
+                }
+                var articleTags = meta.parseTags(contents);
+                index.articles[articleName] = {
+                    file: file,
+                    next: (i != count - 1 ? stripMd(files[i + 1].filename) : null),
+                    prev: (i != 0 ? stripMd(files[i - 1].filename) : null),
+                    tags: articleTags,
+                    title: meta.parseTitle(contents)
+                };
+                tags.addAll(articleTags);
+                if (i == 0) {
+                    index.first = articleName;
+                }
+                cb();
+            });
+        });
     }
     return wrapped;
 }

@@ -14,7 +14,7 @@ app.set('view engine', 'html');
 app.set('views', './templates');
 
 console.log('Loading configuration file... ')
-var config = require('./sakuya/config').loadConfig(process.env['SAKUYA_CFG']);
+var config = require('./sakuya/config').loadConfig();
 
 console.log('Processing content files...')
 content.generateIndex(config.contents, function(err, index) {
