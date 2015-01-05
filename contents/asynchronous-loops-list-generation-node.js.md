@@ -93,9 +93,10 @@ and change my `forEach` callback to be
 
 But this function is still very specifically handling my use-case of wanting
 all the results in a list (while in another use case, I might want to process
-the file contents as they are made available).
-I still can't use `processFile` independently, and there's a lot of code
-managing control flow in a function that just needs to read file contents.
+the file contents individually as they are made available).
+On top of this, I still can't use `processFile` independently, and there's a
+lot of code managing control flow in a function that just needs to read file
+contents.
 
 Did we even solve anything at all? Let's move on to another solution that
 can actually get rid of these flaws.
