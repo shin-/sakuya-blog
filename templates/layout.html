@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <title>{{blogTitle}} : {% block pagetitle %}{{pageTitle}}{% endblock %}</title>
+        {% if tags %}<meta name="keywords" content="{{tags.join()}}"/>{% endif %}
         <link rel="stylesheet" href="/css/main.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/{{hltheme}}.css">
@@ -21,7 +22,7 @@
                 <li class="label label-info"><a href="/tags/{{tag}}">{{tag}}</a></li>
             {% endfor %}
             </ul>
-            <p id="article-text" class="row">{{articleContents()}}</p>
+            <div id="article-text" class="row">{{articleContents()}}</div>
         {% endblock content %}
         </div>
 

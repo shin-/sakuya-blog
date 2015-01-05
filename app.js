@@ -47,15 +47,24 @@ content.generateIndex(config.contents, function(err, index) {
     app.get('/tags/:tag', middlewares.viewCommons(config, index), function(req, res) {
         var articles = meta.findArticlesForTag(index, req.params.tag)
         res.render('tags.html', req.commons({
-            articles: articles,
+            articles: articles.map(function(art) {
+                return {'id': art, 'title': index.articles[art].title };
+            }),
             tag: req.params.tag
         }));
     });
 
     app.get('/tags/', middlewares.viewCommons(config, index), function(req, res) {
         res.render('tags.html', req.commons({
-            articles: index.tags
+            articles: index.tags.map(function(tag) {
+                return { 'id': tag, 'title': tag };
+            })
         }));
+    });
+
+    app.get('/robots.txt', function(req, res) {
+        res.set('Content-Type', 'text/plain');
+        res.end();
     });
 
     var server = app.listen(1990, function () {

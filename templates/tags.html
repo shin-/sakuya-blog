@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 
-{% block pagetitle %}
-{% if tag %}Articles for tag "{{tag}}"{% else %}Tags{% endif %}
+{% block pagetitle %}{% if tag %}Articles for tag "{{tag}}"{% else %}Tags{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -12,7 +11,7 @@
 {% endif %}
 <ul>
 {% for article in articles %}
-<li><a href="{% if not tag %}/tags{% endif %}/{{article}}">{{article}}</a></li>
+<li><a href="{% if not tag %}/tags{% endif %}/{{article.id}}">{{article.title}}</a></li>
 {% endfor %}
 </ul>
 {% endblock content %}
