@@ -31,8 +31,8 @@ libraries on npm and elsewhere that will help you do these things.
 My approach here is a minimal one that uses no third-party libraries as an
 exercise in leaner code and better understanding of the asynchronous paradigm.
 
-If you're looking for ready-made solutions, look into 
-[async](https://github.com/caolan/async), 
+If you're looking for ready-made solutions, look into
+[async](https://github.com/caolan/async),
 [fibers](https://github.com/laverdet/node-fibers) or
 [async-foreach](https://www.npmjs.com/package/async-foreach).
 
@@ -203,7 +203,7 @@ function after(count, fn) {
 ## Final words
 
 It's important to be able to separate control-flow related code from the rest
-in your node.js app. In my opinion, when people say "I can't keep track of 
+in your node.js app. In my opinion, when people say "I can't keep track of
 anything in node.js, it's a callback-ridden nested mess.", it's usually because
 they didn't make this separation properly &ndash; it's a common mistake
 especially from people who are writing asynchronous code for the first time.

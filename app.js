@@ -22,7 +22,7 @@ content.generateIndex(config.contents, function(err, index) {
         return console.error('Error generating index:', err);
     }
     console.log(
-        'Index generated, ' + Object.keys(index.articles).length + 
+        'Index generated, ' + Object.keys(index.articles).length +
         ' articles found.'
     )
     for (articleName in index.articles) {

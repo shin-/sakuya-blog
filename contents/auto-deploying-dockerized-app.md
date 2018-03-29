@@ -4,25 +4,25 @@
 # Auto-deploying your dockerized app
 
 This article will explain how you can automate your app deployment using
-[docker-py](http://github.com/docker/docker-py) and the 
+[docker-py](http://github.com/docker/docker-py) and the
 [Docker Hub](http://hub.docker.com). This is what I currently use to automatically
 update my blog and deploy it on [joffrey.eu](http://joffrey.eu).
 
 ## Pre-requisites
 
 * A Docker Hub account (it's free, so no reason to not have one!)
-* A server with Docker installed and the possibility to expose a TCP port 
+* A server with Docker installed and the possibility to expose a TCP port
   (we're going to have a python app listening for HTTP requests).
 * A modicum of python-fu!
 
 ## Create and configure our repo on Docker Hub
 
-We can either create a [standard repository](https://registry.hub.docker.com/account/repositories/add/) 
+We can either create a [standard repository](https://registry.hub.docker.com/account/repositories/add/)
 to which we will be pushing manually, or an [automated build](https://registry.hub.docker.com/builds/add/)
 that will pull our code from Github/Bitbucket and build our container automatically.
-Both are fine! 
+Both are fine!
 
-Once our repository is created, we need to access the repository page 
+Once our repository is created, we need to access the repository page
 (it should look something like `http://registry.hub.docker.com/u/<repo_name>`).
 In the right hand side menu, there's a link called "Webhooks" that we'll want to click.
 
@@ -54,7 +54,7 @@ flask==0.10.1
 ```
 
 I defer the deployment task after receiving the HTTP request in an asynchronous
-process using the [`multiprocessing` python module](https://docs.python.org/2/library/multiprocessing.html). 
+process using the [`multiprocessing` python module](https://docs.python.org/2/library/multiprocessing.html).
 For better scaling solutions, look towards Celery instead.
 
 ### autodeployer.py:
@@ -96,7 +96,7 @@ def deploy(payload):
             c.start(ctnr)
             print 'Sending callback...'
             requests.post(
-                payload['callback_url'], 
+                payload['callback_url'],
                 data=json.dumps({'state': 'success', 'context': ctnr['Id'] }),
                 headers={'Content-Type': 'application/json'}
             )
@@ -130,12 +130,12 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3456)
 ```
 
-Starting with the `webhook_receiver()` method &ndash; the decorator simply 
+Starting with the `webhook_receiver()` method &ndash; the decorator simply
 states that POST requests on the `/deploy` endpoint will be processed by this
 request. Other requests will result in status 404 or 405. We do a few checks
-on the data we received to make sure it is well-formed and expected. 
+on the data we received to make sure it is well-formed and expected.
 
-If everything passes, we start the `deploy()` method in one of our worker processes 
+If everything passes, we start the `deploy()` method in one of our worker processes
 (we have a pool of 3 configured to handle concurrent requests just in case),
 and send a 200 "ok" response to inform the Docker Hub that we've received the request.
 
@@ -146,7 +146,7 @@ Using this client, we:
 * Pull the latest version of the repository
 * Retrieve a container that was previously created with the same name, and if it exists,
   stop then remove it.
-* Create a new container with the image we just pulled and a few options 
+* Create a new container with the image we just pulled and a few options
   (here specifically, I'm mapping the port 1990 that my application is using to the
   same port on the host. If you need to use different ports, adapt the code accordingly)
 * Start the container.
