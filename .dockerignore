@@ -1,0 +1,6 @@
+.dockerignore
+.git*
+nginx
+Dockerfile
+README.md
+LICENSE

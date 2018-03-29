@@ -1,0 +1,20 @@
+version: '2.3'
+services:
+  cache:
+    image: redis:alpine
+    networks:
+      - backend
+  blog:
+    build:
+      context: .
+    volumes:
+      - type: bind
+        source: ./contents
+        target: /var/app/contents
+    ports:
+      - 1990:1990
+    networks:
+      - backend
+
+networks:
+  backend:
