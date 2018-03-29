@@ -12,7 +12,7 @@ services:
         source: ./contents
         target: /var/app/contents
     ports:
-      - 1990:1990
+      - 127.0.0.1:${SAKUYA_PORT:-1990}:1990
     networks:
       - backend
     environment:
