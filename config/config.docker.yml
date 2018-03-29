@@ -1,0 +1,7 @@
+title: Gin and electronic
+contents: /var/app/contents
+highlight-theme: zenburn
+cache:
+    type: redis
+    port: 6379
+    host: cache
