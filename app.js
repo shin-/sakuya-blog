@@ -1,5 +1,5 @@
 var express = require('express'),
-    swig = require('swig');
+    swig = require('swig-templates');
 
 var middlewares = require('./sakuya/middlewares'),
     content = require('./sakuya/content-processing'),

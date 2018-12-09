@@ -1,6 +1,6 @@
 {
   "name": "sakuya-blog",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "simple blog system",
   "main": "app.js",
   "scripts": {
@@ -12,17 +12,17 @@
     "url": "https://github.com/shin-/sakuya-blog.git"
   },
   "author": "Joffrey F <f.joffrey@gmail.com>",
-  "license": "Apache Public License",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/shin-/sakuya-blog/issues"
   },
   "homepage": "https://github.com/shin-/sakuya-blog",
   "dependencies": {
-    "express": "^4.10.6",
-    "js-yaml": "^3.2.5",
-    "marked": "^0.3.2",
+    "express": "^4.16.4",
+    "js-yaml": "^3.12.0",
+    "marked": "^0.5.2",
     "redis": "^2.8.0",
-    "swig": "^1.4.2",
-    "underscore": "^1.7.0"
+    "swig-templates": "^2.0.3",
+    "underscore": "^1.9.1"
   }
 }
